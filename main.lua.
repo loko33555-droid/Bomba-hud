@@ -4,22 +4,22 @@ local Player = Players.LocalPlayer
 -- Notificación de inicio
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "BOMBA HUD",
-    Text = "Cargando menú...",
+    Text = "Script Activado con Éxito",
     Duration = 5
 })
 
--- 1. LIMPIEZA TOTAL
+-- 1. LIMPIEZA DE INTERFAZ PREVIA
 local pGui = Player:WaitForChild("PlayerGui")
 if pGui:FindFirstChild("BombaHudFinal") then
     pGui.BombaHudFinal:Destroy()
 end
 
--- 2. CREACIÓN DE INTERFAZ
+-- 2. CREACIÓN DE LA INTERFAZ
 local sg = Instance.new("ScreenGui", pGui)
 sg.Name = "BombaHudFinal"
 sg.ResetOnSpawn = false
 
--- BOTÓN FLOTANTE
+-- BOTÓN PARA ABRIR EL MENÚ
 local btn = Instance.new("TextButton", sg)
 btn.Size = UDim2.new(0, 100, 0, 40)
 btn.Position = UDim2.new(0, 10, 0.5, 0)
@@ -27,9 +27,10 @@ btn.Text = "ABRIR HUD"
 btn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 btn.TextColor3 = Color3.new(1, 1, 1)
 
+-- PANEL PRINCIPAL
 local frame = Instance.new("Frame", sg)
-frame.Size = UDim2.new(0, 200, 0, 250)
-frame.Position = UDim2.new(0.5, -100, 0.5, -125)
+frame.Size = UDim2.new(0, 200, 0, 200)
+frame.Position = UDim2.new(0.5, -100, 0.5, -100)
 frame.Visible = false
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
@@ -37,8 +38,8 @@ btn.MouseButton1Click:Connect(function()
     frame.Visible = not frame.Visible
 end)
 
--- 3. FUNCIONES (GOD MODE Y TELEPORTS)
-local function createButton(txt, pos, color, func)
+-- 3. FUNCIÓN PARA CREAR BOTONES RÁPIDO
+local function createBtn(txt, pos, color, func)
     local b = Instance.new("TextButton", frame)
     b.Size = UDim2.new(0.9, 0, 0, 40)
     b.Position = pos
@@ -48,20 +49,12 @@ local function createButton(txt, pos, color, func)
     b.MouseButton1Click:Connect(func)
 end
 
--- BOTÓN GOD MODE
-createButton("GOD MODE", UDim2.new(0.05, 0, 0.1, 0), Color3.fromRGB(0, 150, 0), function()
-    local char = Player.Character
-    if char and char:FindFirstChild("Humanoid") then
-        char.Humanoid.MaxHealth = 999999
-        char.Humanoid.Health = 999999
+-- BOTÓN DE VIDA INFINITA (GOD MODE)
+createBtn("GOD MODE", UDim2.new(0.05, 0, 0.1, 0), Color3.fromRGB(0, 150, 0), function()
+    if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+        Player.Character.Humanoid.MaxHealth = 999999
+        Player.Character.Humanoid.Health = 999999
     end
 end)
 
--- TELEPORTS
-createButton("LOBBY", UDim2.new(0.05, 0, 0.3, 0), Color3.fromRGB(0, 100, 200), function()
-    Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) -- Ajusta coords
-end)
-
-createButton("ZONA SECRETA", UDim2.new(0.05, 0, 0.5, 0), Color3.fromRGB(150, 0, 150), function()
-    Player.Character.HumanoidRootPart.CFrame = CFrame.new(100, 20, 100) -- Ajusta coords
-end)
+-- BOTÓN DE TELE
