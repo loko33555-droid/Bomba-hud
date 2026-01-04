@@ -1,42 +1,49 @@
-local ClaveCorrecta = "BOMBA2026"
+local KeyRequerida = "BOMBA2036"
+local LinkRaw = "https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/refs/heads/main/main.lua"
 
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local TextBox = Instance.new("TextBox")
-local SubmitBtn = Instance.new("TextButton")
-local Title = Instance.new("TextLabel")
+local Player = game:GetService("Players").LocalPlayer
+local pGui = Player:WaitForChild("PlayerGui")
 
-ScreenGui.Parent = game.CoreGui
-MainFrame.Size = UDim2.new(0, 300, 0, 150)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.Parent = ScreenGui
+-- Crear Interfaz de Login
+local sg = Instance.new("ScreenGui", pGui)
+sg.Name = "BombaLogin"
 
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.Text = "INGRESA LA CLAVE"
-Title.TextColor3 = Color3.new(1, 1, 1)
-Title.BackgroundTransparency = 1
-Title.Parent = MainFrame
+local main = Instance.new("Frame", sg)
+main.Size = UDim2.new(0, 260, 0, 160)
+main.Position = UDim2.new(0.5, -130, 0.4, 0)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Instance.new("UICorner", main)
+local stroke = Instance.new("UIStroke", main)
+stroke.Color = Color3.fromRGB(255, 170, 0)
 
-TextBox.Size = UDim2.new(0.8, 0, 0, 30)
-TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-TextBox.PlaceholderText = "Escribe aquí..."
-TextBox.Text = ""
-TextBox.Parent = MainFrame
+local input = Instance.new("TextBox", main)
+input.Size = UDim2.new(0.8, 0, 0, 35)
+input.Position = UDim2.new(0.1, 0, 0.25, 0)
+input.PlaceholderText = "Escribe la Key..."
+input.Text = ""
+input.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+input.TextColor3 = Color3.new(1,1,1)
 
-SubmitBtn.Size = UDim2.new(0.5, 0, 0, 30)
-SubmitBtn.Position = UDim2.new(0.25, 0, 0.7, 0)
-SubmitBtn.Text = "Verificar"
-SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-SubmitBtn.Parent = MainFrame
+local btn = Instance.new("TextButton", main)
+btn.Size = UDim2.new(0.8, 0, 0, 40)
+btn.Position = UDim2.new(0.1, 0, 0.6, 0)
+btn.Text = "VERIFICAR"
+btn.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
+btn.Font = Enum.Font.SourceSansBold
 
-SubmitBtn.MouseButton1Click:Connect(function()
-    if TextBox.Text == ClaveCorrecta then
-        ScreenGui:Destroy()
-        -- ESTE CARGA TU HUD ORIGINAL DESDE EL OTRO ARCHIVO
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/main/main.lua"))()
-   else
-        TextBox.Text = ""
-        TextBox.PlaceholderText = "¡CLAVE INCORRECTA!"
+btn.MouseButton1Click:Connect(function()
+    if input.Text == KeyRequerida then
+        btn.Text = "ACCESO CORRECTO ✅"
+        btn.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+        wait(1)
+        sg:Destroy()
+        -- CARGA TU SCRIPT DESDE GITHUB USANDO TU LINK RAW
+        loadstring(game:HttpGet(LinkRaw))()
+    else
+        btn.Text = "KEY INVÁLIDA ❌"
+        btn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+        wait(1)
+        btn.Text = "VERIFICAR"
+        btn.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
     end
 end)
