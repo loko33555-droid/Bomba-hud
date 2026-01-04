@@ -1,101 +1,75 @@
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
--- Notificación de que el script inició
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "BOMBA HUD",
-    Text = "Cargando menú...",
-    Duration = 5
-})
+-- === SISTEMA DE LLAVE (AGREGADO) ===
+local ClaveCorrecta = "BOMBA2036" -- Tu llave configurada
+local LinkKey = "https://link-center.net/2636864/IsyGHrpyCwdr" -- Tu link de Linkvertise
 
--- 1. LIMPIEZA TOTAL
-local pGui = Player:WaitForChild("PlayerGui")
-if pGui:FindFirstChild("BombaHudFinal") then pGui.BombaHudFinal:Destroy() end
+local function CrearLogin()
+    local sgLogin = Instance.new("ScreenGui", Player:WaitForChild("PlayerGui"))
+    sgLogin.Name = "BombaLogin"
 
--- 2. CREACIÓN DE INTERFAZ
-local sg = Instance.new("ScreenGui", pGui)
-sg.Name = "BombaHudFinal"
-sg.ResetOnSpawn = false
+    local main = Instance.new("Frame", sgLogin)
+    main.Size = UDim2.new(0, 300, 0, 200)
+    main.Position = UDim2.new(0.5, -150, 0.4, 0)
+    main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    main.BorderSizePixel = 2
 
--- BOTÓN FLOTANTE (ROJO PARA QUE SE VEA)
-local btn = Instance.new("TextButton", sg)
-btn.Size = UDim2.new(0, 100, 0, 50)
-btn.Position = UDim2.new(0.5, -50, 0.2, 0)
-btn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-btn.Text = "ABRIR HUD"
-btn.TextColor3 = Color3.new(1,1,1)
-btn.Draggable = true
-btn.Active = true
+    local title = Instance.new("TextLabel", main)
+    title.Size = UDim2.new(1, 0, 0, 40)
+    title.Text = "SISTEMA DE LLAVES - BOMBA HUD"
+    title.TextColor3 = Color3.new(1,1,1)
+    title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 
--- MENÚ NEGRO
-local frame = Instance.new("Frame", sg)
-frame.Size = UDim2.new(0, 220, 0, 300)
-frame.Position = UDim2.new(0.5, -110, 0.3, 0)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.Visible = false
+    local input = Instance.new("TextBox", main)
+    input.Size = UDim2.new(0.8, 0, 0, 40)
+    input.Position = UDim2.new(0.1, 0, 0.3, 0)
+    input.PlaceholderText = "Pega la llave aquí..."
+    input.Text = ""
 
--- LISTA SCROLL
-local scroll = Instance.new("ScrollingFrame", frame)
-scroll.Size = UDim2.new(1, 0, 1, -40)
-scroll.Position = UDim2.new(0, 0, 0, 40)
-scroll.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
+    local btnGet = Instance.new("TextButton", main)
+    btnGet.Size = UDim2.new(0.4, 0, 0, 40)
+    btnGet.Position = UDim2.new(0.05, 0, 0.65, 0)
+    btnGet.Text = "OBTENER KEY"
+    btnGet.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    btnGet.TextColor3 = Color3.new(1,1,1)
 
-local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0, 5)
+    local btnCheck = Instance.new("TextButton", main)
+    btnCheck.Size = UDim2.new(0.4, 0, 0, 40)
+    btnCheck.Position = UDim2.new(0.55, 0, 0.65, 0)
+    btnCheck.Text = "INGRESAR"
+    btnCheck.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+    btnCheck.TextColor3 = Color3.new(1,1,1)
 
--- FUNCION TELEPORT
-local function TP(x)
-    local char = Player.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        char.HumanoidRootPart.CFrame = CFrame.new(x, 7, char.HumanoidRootPart.Position.Z)
-    end
-end
+    -- Función Copiar Link
+    btnGet.MouseButton1Click:Connect(function()
+        setclipboard(LinkKey)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Copiado",
+            Text = "Link de Linkvertise copiado al portapapeles",
+            Duration = 5
+        })
+    end)
 
--- FUNCION CREAR BOTONES
-local function Add(txt, color, x)
-    local b = Instance.new("TextButton", scroll)
-    b.Size = UDim2.new(1, 0, 0, 35)
-    b.BackgroundColor3 = color
-    b.Text = txt
-    b.TextColor3 = Color3.new(1,1,1)
-    b.MouseButton1Click:Connect(function() TP(x) end)
-end
-
--- BOTONES CON TUS COORDENADAS
-Add("🏠 LOBBY (122)", Color3.fromRGB(100, 100, 100), 122)
-Add("🟢 COMÚN (239)", Color3.fromRGB(0, 180, 0), 239)
-Add("🔵 NO COMÚN (334)", Color3.fromRGB(0, 100, 200), 334)
-Add("🟦 RARA (464)", Color3.fromRGB(0, 0, 255), 464)
-Add("🟣 ÉPICA (734)", Color3.fromRGB(150, 0, 200), 734)
-Add("🟠 LEGENDARIA (1044)", Color3.fromRGB(255, 120, 0), 1044)
-Add("🔴 MÍTICA (1532)", Color3.fromRGB(200, 0, 0), 1532)
-Add("🌌 CÓSMICA (2193)", Color3.fromRGB(50, 0, 100), 2193)
-Add("⚫ SECRETA (2397)", Color3.fromRGB(0, 0, 0), 2397)
-
--- BOTÓN GOD MODE
-local godBtn = Instance.new("TextButton", frame)
-godBtn.Size = UDim2.new(1, 0, 0, 35)
-godBtn.Text = "GOD MODE: OFF"
-godBtn.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-godBtn.TextColor3 = Color3.new(1,1,1)
-
-local god = false
-godBtn.MouseButton1Click:Connect(function()
-    god = not god
-    godBtn.Text = god and "GOD MODE: ON" or "GOD MODE: OFF"
-    godBtn.BackgroundColor3 = god and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(80, 0, 0)
-end)
-
-game:GetService("RunService").Heartbeat:Connect(function()
-    if god and Player.Character then
-        for _, v in pairs(Player.Character:GetDescendants()) do
-            if v:IsA("BasePart") then v.CanTouch = false end
+    -- Función Revisar Llave
+    btnCheck.MouseButton1Click:Connect(function()
+        if input.Text == ClaveCorrecta then
+            sgLogin:Destroy()
+            CargarHUD() -- Solo carga si la llave es correcta
+        else
+            input.Text = ""
+            input.PlaceholderText = "LLAVE INCORRECTA"
         end
-    end
-end)
+    end)
+end
 
--- ABRIR/CERRAR
-btn.MouseButton1Click:Connect(function()
-    frame.Visible = not frame.Visible
-end)
+-- === TU SCRIPT ORIGINAL (DENTRO DE UNA FUNCIÓN) ===
+function CargarHUD()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "BOMBA HUD",
+        Text = "Acceso Concedido. Cargando...",
+        Duration = 5
+    })
+
+    local pGui = Player:WaitForChild("PlayerGui")
+    if pGui:FindFirst
