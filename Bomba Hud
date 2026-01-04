@@ -31,8 +31,8 @@ SubmitBtn.MouseButton1Click:Connect(function()
     if TextBox.Text == ClaveCorrecta then
         ScreenGui:Destroy()
         -- AQUÍ CARGA TU SCRIPT ORIGINAL
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/refs/heads/main/Bomba%20Hud"))()
-    else
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/main/main.lua"))()
+   else
         TextBox.Text = ""
         TextBox.PlaceholderText = "¡CLAVE INCORRECTA!"
     end
