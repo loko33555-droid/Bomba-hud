@@ -1,3 +1,5 @@
+local ClaveCorrecta = "BOMBA2026"
+
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local TextBox = Instance.new("TextBox")
@@ -31,10 +33,9 @@ SubmitBtn.Parent = MainFrame
 SubmitBtn.MouseButton1Click:Connect(function()
     if TextBox.Text == ClaveCorrecta then
         ScreenGui:Destroy()
-        -- AQUÍ CARGA TU SCRIPT ORIGINAL DESDE EL ARCHIVO QUE CREASTE
         loadstring(game:HttpGet("https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/main/main.lua"))()
-   else
+    else
         TextBox.Text = ""
-        TextBox.PlaceholderText = "¡CLAVE INCORRECTA!"
+        TextBox.PlaceholderText = "CLAVE INCORRECTA"
     end
 end)
