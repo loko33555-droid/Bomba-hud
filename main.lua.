@@ -1,102 +1,67 @@
-main.lua.
-local Players = game:GetService("Players")
+local Players = game:GetService('Players')
 local Player = Players.LocalPlayer
 
--- NotificaciÃ³n de que el script iniciÃ³
+-- Notificación de inicio
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "BOMBA HUD",
-    Text = "Cargando menÃº...",
+    Text = "Cargando menú...",
     Duration = 5
 })
 
 -- 1. LIMPIEZA TOTAL
 local pGui = Player:WaitForChild("PlayerGui")
-if pGui:FindFirstChild("BombaHudFinal") then pGui.BombaHudFinal:Destroy() end
+if pGui:FindFirstChild("BombaHudFinal") then
+    pGui.BombaHudFinal:Destroy()
+end
 
--- 2. CREACIÃ“N DE INTERFAZ
+-- 2. CREACIÓN DE INTERFAZ
 local sg = Instance.new("ScreenGui", pGui)
 sg.Name = "BombaHudFinal"
 sg.ResetOnSpawn = false
 
--- BOTÃ“N FLOTANTE (ROJO PARA QUE SE VEA)
+-- BOTÓN FLOTANTE
 local btn = Instance.new("TextButton", sg)
-btn.Size = UDim2.new(0, 100, 0, 50)
-btn.Position = UDim2.new(0.5, -50, 0.2, 0)
-btn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+btn.Size = UDim2.new(0, 100, 0, 40)
+btn.Position = UDim2.new(0, 10, 0.5, 0)
 btn.Text = "ABRIR HUD"
-btn.TextColor3 = Color3.new(1,1,1)
-btn.Draggable = true
-btn.Active = true
+btn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+btn.TextColor3 = Color3.new(1, 1, 1)
 
--- MENÃš NEGRO
 local frame = Instance.new("Frame", sg)
-frame.Size = UDim2.new(0, 220, 0, 300)
-frame.Position = UDim2.new(0.5, -110, 0.3, 0)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.Size = UDim2.new(0, 200, 0, 250)
+frame.Position = UDim2.new(0.5, -100, 0.5, -125)
 frame.Visible = false
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
--- LISTA SCROLL
-local scroll = Instance.new("ScrollingFrame", frame)
-scroll.Size = UDim2.new(1, 0, 1, -40)
-scroll.Position = UDim2.new(0, 0, 0, 40)
-scroll.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
-
-local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0, 5)
-
--- FUNCION TELEPORT
-local function TP(x)
-    local char = Player.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        char.HumanoidRootPart.CFrame = CFrame.new(x, 7, char.HumanoidRootPart.Position.Z)
-    end
-end
-
--- FUNCION CREAR BOTONES
-local function Add(txt, color, x)
-    local b = Instance.new("TextButton", scroll)
-    b.Size = UDim2.new(1, 0, 0, 35)
-    b.BackgroundColor3 = color
-    b.Text = txt
-    b.TextColor3 = Color3.new(1,1,1)
-    b.MouseButton1Click:Connect(function() TP(x) end)
-end
-
--- BOTONES CON TUS COORDENADAS
-Add("ðŸ  LOBBY (122)", Color3.fromRGB(100, 100, 100), 122)
-Add("ðŸŸ¢ COMÃšN (239)", Color3.fromRGB(0, 180, 0), 239)
-Add("ðŸ”µ NO COMÃšN (334)", Color3.fromRGB(0, 100, 200), 334)
-Add("ðŸŸ¦ RARA (464)", Color3.fromRGB(0, 0, 255), 464)
-Add("ðŸŸ£ Ã‰PICA (734)", Color3.fromRGB(150, 0, 200), 734)
-Add("ðŸŸ  LEGENDARIA (1044)", Color3.fromRGB(255, 120, 0), 1044)
-Add("ðŸ”´ MÃTICA (1532)", Color3.fromRGB(200, 0, 0), 1532)
-Add("ðŸŒŒ CÃ“SMICA (2193)", Color3.fromRGB(50, 0, 100), 2193)
-Add("âš« SECRETA (2397)", Color3.fromRGB(0, 0, 0), 2397)
-
--- BOTÃ“N GOD MODE
-local godBtn = Instance.new("TextButton", frame)
-godBtn.Size = UDim2.new(1, 0, 0, 35)
-godBtn.Text = "GOD MODE: OFF"
-godBtn.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-godBtn.TextColor3 = Color3.new(1,1,1)
-
-local god = false
-godBtn.MouseButton1Click:Connect(function()
-    god = not god
-    godBtn.Text = god and "GOD MODE: ON" or "GOD MODE: OFF"
-    godBtn.BackgroundColor3 = god and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(80, 0, 0)
-end)
-
-game:GetService("RunService").Heartbeat:Connect(function()
-    if god and Player.Character then
-        for _, v in pairs(Player.Character:GetDescendants()) do
-            if v:IsA("BasePart") then v.CanTouch = false end
-        end
-    end
-end)
-
--- ABRIR/CERRAR
 btn.MouseButton1Click:Connect(function()
     frame.Visible = not frame.Visible
+end)
+
+-- 3. FUNCIONES (GOD MODE Y TELEPORTS)
+local function createButton(txt, pos, color, func)
+    local b = Instance.new("TextButton", frame)
+    b.Size = UDim2.new(0.9, 0, 0, 40)
+    b.Position = pos
+    b.Text = txt
+    b.BackgroundColor3 = color
+    b.TextColor3 = Color3.new(1, 1, 1)
+    b.MouseButton1Click:Connect(func)
+end
+
+-- BOTÓN GOD MODE
+createButton("GOD MODE", UDim2.new(0.05, 0, 0.1, 0), Color3.fromRGB(0, 150, 0), function()
+    local char = Player.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.MaxHealth = 999999
+        char.Humanoid.Health = 999999
+    end
+end)
+
+-- TELEPORTS
+createButton("LOBBY", UDim2.new(0.05, 0, 0.3, 0), Color3.fromRGB(0, 100, 200), function()
+    Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) -- Ajusta coords
+end)
+
+createButton("ZONA SECRETA", UDim2.new(0.05, 0, 0.5, 0), Color3.fromRGB(150, 0, 150), function()
+    Player.Character.HumanoidRootPart.CFrame = CFrame.new(100, 20, 100) -- Ajusta coords
 end)
