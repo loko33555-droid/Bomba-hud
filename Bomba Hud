@@ -19,6 +19,7 @@ Title.Parent = MainFrame
 TextBox.Size = UDim2.new(0.8, 0, 0, 30)
 TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
 TextBox.PlaceholderText = "Escribe aquí..."
+TextBox.Text = ""
 TextBox.Parent = MainFrame
 
 SubmitBtn.Size = UDim2.new(0.5, 0, 0, 30)
@@ -30,7 +31,7 @@ SubmitBtn.Parent = MainFrame
 SubmitBtn.MouseButton1Click:Connect(function()
     if TextBox.Text == ClaveCorrecta then
         ScreenGui:Destroy()
-        -- AQUÍ CARGA TU SCRIPT ORIGINAL
+        -- AQUÍ CARGA TU SCRIPT ORIGINAL DESDE EL ARCHIVO QUE CREASTE
         loadstring(game:HttpGet("https://raw.githubusercontent.com/loko33555-droid/Bomba-hud/main/main.lua"))()
    else
         TextBox.Text = ""
