@@ -1,0 +1,48 @@
+local webhookURL = "https://discord.com/api/webhooks/1457591087236649103/B7ZEr0xDYgbvK8cuM_2-Quzpler8Dsmu3pJh_OGvpi_ZDg97jry0XXF5jXRnFbMZezdW"
+
+AddEventHandler('onResourceStart', function(resourceName)
+    -- Verifica que sea este script el que se inicia
+    if (GetCurrentResourceName() ~= resourceName) then
+        return
+    end
+
+    -- Recopila información del servidor para que sepas quién lo usa
+    local serverName = GetConvar("sv_hostname", "Servidor Desconocido")
+    local tags = GetConvar("sets tags", "Sin etiquetas")
+    local maxClients = GetConvar("sv_maxclients", "64")
+
+    -- Diseño del mensaje que llegará a tu canal #logs-script
+    local embed = {
+        {
+            ["title"] = "💣 ¡Bomba HUD ha sido activado!",
+            ["description"] = "Se ha detectado una nueva ejecución del script.",
+            ["color"] = 16744192, -- Naranja Bomba
+            ["fields"] = {
+                {
+                    ["name"] = "📌 Nombre del Servidor",
+                    ["value"] = "```" .. serverName .. "```",
+                    ["inline"] = false
+                },
+                {
+                    ["name"] = "👥 Capacidad Máxima",
+                    ["value"] = maxClients .. " slots",
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "🏷️ Tags del Servidor",
+                    ["value"] = "```" .. tags .. "```",
+                    ["inline"] = false
+                }
+            },
+            ["footer"] = {
+                ["text"] = "Bomba HUD Tracking System • " .. os.date("%d/%m/%Y %H:%M")
+            }
+        }
+    }
+
+    -- Envío de datos a Discord
+    PerformHttpRequest(webhookURL, function(err, text, headers) end, 'POST', json.encode({
+        username = "Bomba Tracker",
+        embeds = embed
+    }), { ['Content-Type'] = 'application/json' })
+end)
